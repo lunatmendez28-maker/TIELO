@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TIELO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf8f5;
+      --warm-white: #f5f2ee;
+      --charcoal: #1a1a1a;
+      --mid: #6b6560;
+      --accent: #c9a96e;
+      --border: #e8e3dc;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      font-weight: 300;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: var(--charcoal);
+      text-decoration: none;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .logo span { color: inherit; font-style: normal; }
+    .logo-sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--mid);
+      font-weight: 300;
+    }
+
+    .cart-btn {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 8px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cart-btn:hover { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); }
+    .cart-count {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      font-size: 0.7rem;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 500;
+    }
+
+    /* ══════════════════════════════
+       FRANJA DE VIDEOS
+    ══════════════════════════════ */
+    .video-banner {
+      width: 100%;
+      height: 420px;
+      background: var(--charcoal);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .video-track {
+      display: flex;
+      height: 100%;
+      width: 300%;
+      transition: transform 1.2s ease;
+    }
+
+    .video-slot {
+      width: 33.333%;
+      height: 100%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .video-slot video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.85) contrast(1.05);
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.25);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px dashed rgba(255,255,255,0.1);
+    }
+    .video-placeholder svg { opacity: 0.2; }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 8%;
+      background: linear-gradient(
+        to right,
+      rgba(0,0,0,0.55),
+      rgba(0,0,0,0.2),
+        transparent
+       );
+    }
+
+    .video-tag {
+       font-size: 0.7rem;
+       letter-spacing: 0.25em;
+       text-transform: uppercase;
+       color: rgba(255,255,255,0.7);
+       margin-bottom: 10px;
+    }
+
+    .video-overlay h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: white;
+    }
+
+    .video-dots {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .video-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .video-dot.active {
+      background: var(--accent);
+      transform: scale(1.4);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--charcoal);
+      margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p {
+      font-size: 0.9rem;
+      color: var(--mid);
+      letter-spacing: 0.05em;
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════
+       TABS DE CATEGORÍAS
+    ══════════════════════════════ */
+    .categories-bar {
+      display: flex;
+      align-items: center;
+      padding: 0 5vw;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .categories-bar::-webkit-scrollbar { display: none; }
+
+    .cat-tab {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 20px 22px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      margin-bottom: -1px;
+    }
+    .cat-tab:hover { color: var(--charcoal); }
+    .cat-tab.active {
+      color: var(--charcoal);
+      border-bottom-color: var(--charcoal);
+      font-weight: 500;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 48px 5vw 30px;
+    }
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── GRID ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      background: var(--charcoal);
+      border-top: 12px solid var(--charcoal);
+      border-bottom: 12px solid var(--charcoal);
+      padding: 0 12px;
+      min-height: 200px;
+    }
+
+    .no-products {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--mid);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      background: var(--cream);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s;
+    }
+    .card:hover { background: var(--warm-white); }
+
+    .card-image {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--warm-white);
+    }
+    .card-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-image img { transform: scale(1.04); }
+
+    .img-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--mid);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 2px dashed var(--border);
+    }
+    .img-placeholder svg { opacity: 0.4; }
+
+    .tag-nuevo {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: var(--charcoal);
+      color: var(--cream);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+    }
+
+    .card-info {
+      padding: 20px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.3;
+    }
+    .card-desc {
+      font-size: 0.78rem;
+      color: var(--mid);
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+    }
+    .card-price .currency {
+      font-size: 0.85rem;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      color: var(--mid);
+      margin-right: 3px;
+    }
+
+    .btn-comprar {
+      background: var(--charcoal);
+      color: var(--cream);
+      border: none;
+      padding: 10px 18px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.15s;
+    }
+    .btn-comprar:hover { background: var(--accent); }
+    .btn-comprar:active { transform: scale(0.97); }
+    .btn-comprar.added { background: #4caf50; pointer-events: none; }
+
+    /* ── CARRITO LATERAL ── */
+    .cart-panel {
+      position: fixed;
+      right: -420px; top: 0;
+      width: min(420px, 100vw);
+      height: 100vh;
+      background: var(--cream);
+      border-left: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.4s cubic-bezier(.4,0,.2,1);
+      box-shadow: -8px 0 40px rgba(0,0,0,0.08);
+    }
+    .cart-panel.open { right: 0; }
+
+    .cart-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 199;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-header {
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cart-header h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 400;
+    }
+    .close-cart {
+      background: none; border: none; cursor: pointer;
+      color: var(--mid); font-size: 1.4rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .close-cart:hover { color: var(--charcoal); }
+
+    .cart-items {
+      flex: 1; overflow-y: auto;
+      padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .cart-empty {
+      text-align: center; color: var(--mid);
+      font-size: 0.85rem; letter-spacing: 0.05em;
+      margin-top: 60px;
+    }
+    .cart-empty svg { margin-bottom: 16px; opacity: 0.3; display: block; margin-left: auto; margin-right: auto; }
+
+    .cart-item {
+      display: flex; gap: 14px; align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-thumb {
+      width: 64px; height: 80px;
+      object-fit: cover;
+      background: var(--warm-white);
+      flex-shrink: 0;
+    }
+    .cart-item-thumb.no-img {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; margin-bottom: 4px;
+    }
+    .cart-item-price { font-size: 0.8rem; color: var(--mid); }
+    .cart-item-qty {
+      display: flex; align-items: center; gap: 8px; margin-top: 8px;
+    }
+    .qty-btn {
+      width: 24px; height: 24px;
+      border: 1px solid var(--border);
+      background: none; cursor: pointer; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover { background: var(--charcoal); color: var(--cream); }
+    .qty-num { font-size: 0.85rem; min-width: 20px; text-align: center; }
+    .remove-item {
+      background: none; border: none; cursor: pointer;
+      color: var(--mid); font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    .remove-item:hover { color: #c0392b; }
+
+    .cart-footer {
+      padding: 20px 28px 28px;
+      border-top: 1px solid var(--border);
+    }
+    .cart-total {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .cart-total span:first-child {
+      font-size: 0.78rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--mid);
+    }
+    .cart-total-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      background: #25D366; color: #fff;
+      border: none; padding: 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background 0.25s, transform 0.15s;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; }
+    .btn-whatsapp:active { transform: scale(0.98); }
+    .btn-whatsapp:disabled { background: var(--border); color: var(--mid); cursor: not-allowed; }
+
+    .btn-clear {
+      width: 100%;
+      background: none; border: 1px solid var(--border);
+      padding: 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--mid); cursor: pointer; margin-top: 10px;
+      transition: all 0.2s;
+    }
+    .btn-clear:hover { border-color: #c0392b; color: #c0392b; }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem; letter-spacing: 0.1em; color: var(--mid);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--charcoal); color: var(--cream);
+      padding: 12px 24px;
+      font-size: 0.8rem; letter-spacing: 0.08em;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(.4,0,.2,1);
+      z-index: 300; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 50px 16px 40px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .video-banner { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a href="#" class="logo">TIELO<span class="logo-sub">Prendas Urbanas</span></a>
+  <button class="cart-btn" onclick="toggleCart()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    Carrito
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</header>
+
+<!-- ══ FRANJA DE VIDEOS ══ -->
+<div class="video-banner">
+  <div class="video-track" id="videoTrack">
+
+    <div class="video-slot">
+      <video id="video0" playsinline muted preload="auto"></video>
+      <div class="video-overlay">
+          <p class="video-tag">NEW DROP</p>
+          <h2>Denim esencial</h2>
+      </div>
+      <div class="video-placeholder" id="ph0">
+        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Video 1 — agregar ruta en el código</span>
+      </div>
+    </div>
+
+    <div class="video-slot">
+      <video id="video1" playsinline muted preload="none"></video>
+      <div class="video-placeholder" id="ph1">
+        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Video 2 — agregar ruta en el código</span>
+      </div>
+    </div>
+
+    <div class="video-slot">
+      <video id="video2" playsinline muted preload="none"></video>
+      <div class="video-placeholder" id="ph2">
+        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Video 3 — agregar ruta en el código</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="video-dots">
+    <div class="video-dot active" onclick="goToVideo(0)"></div>
+    <div class="video-dot" onclick="goToVideo(1)"></div>
+    <div class="video-dot" onclick="goToVideo(2)"></div>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <p class="hero-tag">Selección exclusiva</p>
+  <h1>Elegancia<br/><em>sin esfuerzo</em></h1>
+  <p>Prendas pensadas para acompañarte todos los días. Elegí tu favorito y coordiná por WhatsApp.</p>
+</section>
+
+<!-- ══ TABS DE CATEGORÍAS ══ -->
+<nav class="categories-bar">
+  <button class="cat-tab active" onclick="setCategory('todos', this)">Todo</button>
+  <button class="cat-tab" onclick="setCategory('jeans', this)">Jeans</button>
+  <button class="cat-tab" onclick="setCategory('sweaters', this)">Sweaters</button>
+  <button class="cat-tab" onclick="setCategory('remeras', this)">Remeras</button>
+  <button class="cat-tab" onclick="setCategory('carteras', this)">Carteras</button>
+</nav>
+
+<div class="section-header">
+  <h2 id="sectionTitle">Todo</h2>
+</div>
+
+<div class="products-grid" id="productsGrid"></div>
+
+<footer>
+  &copy; 2025 TIELO Prendas Urbanas &nbsp;·&nbsp; Todos los derechos reservados
+</footer>
+
+<!-- ══ CARRITO ══ -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>Tu selección</h3>
+    <button class="close-cart" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span class="cart-total-price" id="cartTotal">$0</span>
+    </div>
+    <button class="btn-whatsapp" id="btnWA" onclick="sendToWhatsApp()" disabled>
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      Pedir por WhatsApp
+    </button>
+    <button class="btn-clear" onclick="clearCart()">Vaciar carrito</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ══════════════════════════════════════════════════
+  //  ✏️  CONFIGURACIÓN
+  // ══════════════════════════════════════════════════
+  const WHATSAPP_NUMBER = "5492246580477";
+  const TIENDA_NOMBRE   = "TIELO";
+
+  // ══════════════════════════════════════════════════
+  //  🎬  VIDEOS
+  //  Reemplazá el "" con la ruta de tu video.
+  //  Los videos tienen que estar guardados en la misma
+  //  carpeta que este archivo HTML, o en una subcarpeta.
+  //  Ejemplo: "videos/lookbook1.mp4"
+  // ══════════════════════════════════════════════════
+  const videoSrcs = [
+    "videos/look1.mp4",
+    "videos/look2.mp4",
+    "videos/look3.mp4"
+  ];
+
+  // ══════════════════════════════════════════════════
+  //  🛍️  PRODUCTOS
+  //  categoria → "jeans" | "sweaters" | "remeras" | "carteras"
+  //  Para agregar más, copiá un bloque { ... } y pegalo
+  //  asegurandote de cambiar el id por un número nuevo.
+  // ══════════════════════════════════════════════════
+  const productos = [
+
+    // ── JEANS ──────────────────────────────────────
+    {
+      id: 1,
+      nombre: "Nombre del jean",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",          // ← Ejemplo: "imagenes/jean1.jpg"
+      categoria: "jeans",
+      nuevo: true
+    },
+    {
+      id: 2,
+      nombre: "Nombre del jean",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "jeans",
+      nuevo: false
+    },
+
+    // ── SWEATERS ───────────────────────────────────
+    {
+      id: 3,
+      nombre: "Nombre del sweater",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "sweaters",
+      nuevo: false
+    },
+    {
+      id: 4,
+      nombre: "Nombre del sweater",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "sweaters",
+      nuevo: true
+    },
+
+    // ── REMERAS ────────────────────────────────────
+    {
+      id: 5,
+      nombre: "Nombre de la remera",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "remeras",
+      nuevo: false
+    },
+    {
+      id: 6,
+      nombre: "Nombre de la remera",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "remeras",
+      nuevo: false
+    },
+
+    // ── CARTERAS ───────────────────────────────────
+    {
+      id: 7,
+      nombre: "Nombre de la cartera",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "carteras",
+      nuevo: true
+    },
+    {
+      id: 8,
+      nombre: "Nombre de la cartera",
+      precio: 0,
+      desc: "Descripción breve",
+      imagen: "",
+      categoria: "carteras",
+      nuevo: false
+    }
+  ];
+
+  // ══════════════════════════════════════════════════
+  //  LÓGICA — no necesitás tocar nada de acá abajo
+  // ══════════════════════════════════════════════════
+
+  // ── Videos ──────────────────────────────────────
+  let currentVideo = 0;
+  let videoTimer   = null;
+
+  function initVideos() {
+    videoSrcs.forEach((src, i) => {
+      const vid = document.getElementById(`video${i}`);
+      const ph  = document.getElementById(`ph${i}`);
+      if (src) {
+        vid.src = src;
+        vid.style.display = "block";
+        ph.style.display  = "none";
+        vid.onended = () => advanceVideo();
+      } else {
+        vid.style.display = "none";
+        ph.style.display  = "flex";
+      }
+    });
+    goToVideo(0);
+  }
+
+  function goToVideo(index) {
+    clearTimeout(videoTimer);
+    // pausar anterior
+    const prev = document.getElementById(`video${currentVideo}`);
+    if (prev) { prev.pause(); prev.currentTime = 0; }
+
+    currentVideo = index;
+
+    // mover el track
+    document.getElementById("videoTrack").style.transform =
+      `translateX(-${index * 33.333}%)`;
+
+    // dots
+    document.querySelectorAll(".video-dot").forEach((d, i) => {
+      d.classList.toggle("active", i === index);
+    });
+
+    // reproducir o temporizador
+    const vid = document.getElementById(`video${index}`);
+    if (videoSrcs[index]) {
+      vid.play().catch(() => {});
+      // onended ya está seteado en initVideos
+    } else {
+      // no hay video: avanza solo después de 4s
+      videoTimer = setTimeout(() => advanceVideo(), 4000);
+    }
+  }
+
+  function advanceVideo() {
+    goToVideo((currentVideo + 1) % 3);
+  }
+
+  // ── Categorías ──────────────────────────────────
+  let categoriaActiva = "todos";
+
+  const catLabels = {
+    todos: "Todo",
+    jeans: "Jeans",
+    sweaters: "Sweaters",
+    remeras: "Remeras",
+    carteras: "Carteras"
+  };
+
+  function setCategory(cat, btn) {
+    categoriaActiva = cat;
+    document.querySelectorAll(".cat-tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("sectionTitle").textContent = catLabels[cat];
+    renderProducts();
+  }
+
+  // ── Productos ───────────────────────────────────
+  let cart = [];
+
+  function formatPrice(n) {
+    return "$" + Number(n).toLocaleString("es-AR");
+  }
+
+  function renderProducts() {
+    const grid  = document.getElementById("productsGrid");
+    const lista = categoriaActiva === "todos"
+      ? productos
+      : productos.filter(p => p.categoria === categoriaActiva);
+
+    if (lista.length === 0) {
+      grid.innerHTML = `<div class="no-products">Próximamente en esta categoría ✦</div>`;
+      return;
+    }
+
+    grid.innerHTML = lista.map(p => `
+      <div class="card" id="card-${p.id}">
+        <div class="card-image">
+          ${p.imagen
+            ? `<img src="${p.imagen}" alt="${p.nombre}" onerror="this.parentElement.innerHTML=noImgHTML()">`
+            : `<div class="img-placeholder">
+                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <path d="M21 15l-5-5L5 21"/>
+                </svg>
+                <span>Sin imagen</span>
+               </div>`
+          }
+          ${p.nuevo ? '<span class="tag-nuevo">Nuevo</span>' : ''}
+        </div>
+        <div class="card-info">
+          <p class="card-name">${p.nombre}</p>
+          <p class="card-desc">${p.desc}</p>
+          <div class="card-bottom">
+            <p class="card-price">
+              <span class="currency">$</span>${Number(p.precio).toLocaleString("es-AR")}
+            </p>
+            <button class="btn-comprar" id="btn-${p.id}" onclick="addToCart(${p.id})">
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function noImgHTML() {
+    return `<div class="img-placeholder">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <path d="M21 15l-5-5L5 21"/>
+      </svg><span>Sin imagen</span></div>`;
+  }
+
+  function addToCart(id) {
+    const prod = productos.find(p => p.id === id);
+    const existing = cart.find(i => i.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...prod, qty: 1 });
+    updateCartUI();
+    showToast(`"${prod.nombre}" agregado al carrito`);
+    const btn = document.getElementById(`btn-${id}`);
+    if (btn) {
+      btn.classList.add("added");
+      btn.textContent = "✓ Agregado";
+      setTimeout(() => { btn.classList.remove("added"); btn.textContent = "Agregar"; }, 1500);
+    }
+  }
+
+  function updateCartUI() {
+    const total = cart.reduce((s, i) => s + i.precio * i.qty, 0);
+    document.getElementById("cartCount").textContent  = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById("cartTotal").textContent  = formatPrice(total);
+    document.getElementById("btnWA").disabled         = cart.length === 0;
+
+    const itemsEl = document.getElementById("cartItems");
+    if (cart.length === 0) {
+      itemsEl.innerHTML = `<div class="cart-empty">
+        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <p>Tu carrito está vacío</p>
+      </div>`;
+      return;
+    }
+
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        ${item.imagen
+          ? `<img class="cart-item-thumb" src="${item.imagen}" alt="${item.nombre}">`
+          : `<div class="cart-item-thumb no-img">👗</div>`}
+        <div class="cart-item-info">
+          <p class="cart-item-name">${item.nombre}</p>
+          <p class="cart-item-price">${formatPrice(item.precio)} c/u</p>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-item" onclick="removeItem(${item.id})" title="Eliminar">✕</button>
+      </div>
+    `).join("");
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) removeItem(id); else updateCartUI();
+  }
+  function removeItem(id) { cart = cart.filter(i => i.id !== id); updateCartUI(); }
+  function clearCart()    { cart = []; updateCartUI(); }
+
+  function toggleCart() {
+    document.getElementById("cartPanel").classList.toggle("open");
+    document.getElementById("cartOverlay").classList.toggle("open");
+  }
+
+  function sendToWhatsApp() {
+    if (cart.length === 0) return;
+    const total = cart.reduce((s, i) => s + i.precio * i.qty, 0);
+    const lines = cart.map(i => `• ${i.nombre} x${i.qty} — ${formatPrice(i.precio * i.qty)}`).join("\n");
+    const msg   = `¡Hola ${TIENDA_NOMBRE}! 👋 Me gustaría hacer el siguiente pedido:\n\n${lines}\n\n*Total: ${formatPrice(total)}*\n\n¿Podemos coordinar la compra?`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  // Init
+  initVideos();
+  renderProducts();
+  updateCartUI();
+</script>
+</body>
+</html>
