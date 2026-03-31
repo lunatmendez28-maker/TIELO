@@ -87,104 +87,93 @@
     }
 
     /* ══════════════════════════════
-       FRANJA DE VIDEOS
-    ══════════════════════════════ */
-    .video-banner {
-      width: 100%;
-      height: 420px;
-      background: var(--charcoal);
+   FRANJA DE VIDEOS — ESTILO PRO
+   ══════════════════════════════ */
+
+   .video-banner-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      background: #1a1a1a;
+    }
+
+    /* Cada video */
+    .video-item {
+      position: relative;
       overflow: hidden;
-      position: relative;
+      border-radius: 8px;
     }
 
-    .video-track {
-      display: flex;
-      height: 100%;
-      width: 300%;
-      transition: transform 1.2s ease;
-    }
-
-    .video-slot {
-      width: 33.333%;
-      height: 100%;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .video-slot video {
+    /* Video */
+    .video-banner-grid video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      filter: brightness(0.85) contrast(1.05);
+      transition: transform 0.5s ease, opacity 0.4s ease;
     }
 
-    .video-placeholder {
+    /* El video grande */
+    .video-banner-grid .video-item:nth-child(1) {
+      grid-row: span 2;
+    }
+
+    /* Hover pro */
+    .video-item:hover video {
+      transform: scale(1.03);
+      opacity: 0.95;
+    }
+
+    /* Texto encima */
+    .video-text {
       position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      color: rgba(255,255,255,0.25);
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      border: 1px dashed rgba(255,255,255,0.1);
-    }
-    .video-placeholder svg { opacity: 0.2; }
-
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-left: 8%;
-      background: linear-gradient(
-        to right,
-      rgba(0,0,0,0.55),
-      rgba(0,0,0,0.2),
-        transparent
-       );
-    }
-
-    .video-tag {
-       font-size: 0.7rem;
-       letter-spacing: 0.25em;
-       text-transform: uppercase;
-       color: rgba(255,255,255,0.7);
-       margin-bottom: 10px;
-    }
-
-    .video-overlay h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 300;
+      bottom: 20px;
+      left: 20px;
       color: white;
+      z-index: 2;
     }
 
-    .video-dots {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      z-index: 10;
+    .video-text p {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.7;
     }
-    .video-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
+
+    .video-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
     }
-    .video-dot.active {
-      background: var(--accent);
-      transform: scale(1.4);
+
+    /* Oscurecer un poco para que el texto se vea mejor */
+   .video-item::after {
+       content: "";
+       position: absolute;
+       inset: 0;
+       background: linear-gradient(
+         to top,
+         rgba(0,0,0,0.5),
+          transparent
+        );
     }
+
+    /* MOBILE */
+   @media (max-width: 600px) {
+   .video-banner-grid {
+     grid-template-columns: 1fr 1fr;
+     grid-template-rows: auto;
+    }
+
+   .video-banner-grid .video-item:nth-child(1) {
+     grid-column: span 2;
+   }
+
+  .video-banner-grid video {
+    height: 180px;
+  }
+}
 
     /* ── HERO ── */
     .hero {
@@ -579,44 +568,24 @@
 </header>
 
 <!-- ══ FRANJA DE VIDEOS ══ -->
-<div class="video-banner">
-  <div class="video-track" id="videoTrack">
+<div class="video-banner-grid">
 
-    <div class="video-slot">
-      <video id="video0" playsinline muted preload="auto"></video>
-      <div class="video-overlay">
-          <p class="video-tag">NEW DROP</p>
-          <h2>Denim esencial</h2>
-      </div>
-      <div class="video-placeholder" id="ph0">
-        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Video 1 — agregar ruta en el código</span>
-      </div>
+  <div class="video-item">
+    <video src="videos/look1.mp4" autoplay muted loop playsinline></video>
+    <div class="video-text">
+      <p>NEW DROP</p>
+      <h2>Denim esencial</h2>
     </div>
-
-    <div class="video-slot">
-      <video id="video1" playsinline muted preload="none"></video>
-      <div class="video-placeholder" id="ph1">
-        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Video 2 — agregar ruta en el código</span>
-      </div>
-    </div>
-
-    <div class="video-slot">
-      <video id="video2" playsinline muted preload="none"></video>
-      <div class="video-placeholder" id="ph2">
-        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        <span>Video 3 — agregar ruta en el código</span>
-      </div>
-    </div>
-
   </div>
 
-  <div class="video-dots">
-    <div class="video-dot active" onclick="goToVideo(0)"></div>
-    <div class="video-dot" onclick="goToVideo(1)"></div>
-    <div class="video-dot" onclick="goToVideo(2)"></div>
+  <div class="video-item">
+    <video src="videos/look2.mp4" autoplay muted loop playsinline></video>
   </div>
+
+  <div class="video-item">
+    <video src="videos/look3.mp4" autoplay muted loop playsinline></video>
+  </div>
+
 </div>
 
 <!-- ══ HERO ══ -->
