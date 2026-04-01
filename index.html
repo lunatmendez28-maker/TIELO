@@ -999,7 +999,7 @@
       desc: "Riñonera de diseño compacto y funcional con 4 bolsillos con cierre",
       imagen: "fotos/look28.jpg",
       categoria: "carteras",
-      nuevo: true
+      nuevo: false
     },
     {
       id: 8,
@@ -1136,7 +1136,7 @@
   grid.innerHTML = lista.map(p => `
     <div class="card" id="card-${p.id}">
 
-      <div class="card-image">
+      <div class="card-image ${p.video ? 'has-video' : ''}">
 
         ${p.imagen
           ? `<img src="${p.imagen}" class="img-main" alt="${p.nombre}" onerror="this.parentElement.innerHTML=noImgHTML()">`
@@ -1151,8 +1151,8 @@
           }
 
          ${p.video
-            ? `<video class="video-hover" src="${p.video}" muted loop playsinline></video>`
-            : ""
+          ? `<video class="video-hover" src="${p.video}" muted loop playsinline></video>`
+          : ""
           }
 
           ${p.nuevo ? '<span class="tag-nuevo">Nuevo</span>' : ''}
